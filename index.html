@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Grades| Canvas</title>
+    <title>Assignments|Canvas</title>
     <style>
         #idModal {
             position: fixed;
@@ -15,14 +15,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
+            z-index: 99999;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
         .modal-content {
             background: #ffffff;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
             width: 320px;
             text-align: center;
         }
@@ -43,6 +43,11 @@
             border-radius: 6px;
             box-sizing: border-box;
             font-size: 14px;
+            outline: none;
+        }
+        .modal-content input:focus {
+            border-color: #0070f3;
+            box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);
         }
         .modal-content button {
             width: 100%;
@@ -68,11 +73,11 @@
 
     <!-- Cloud Identification Modal Overlay -->
     <div id="idModal" style="display: none;">
-        <div class="modal-content">
+        <div class="modal-content" id="modalBox">
             <h3>Cloud Check-In</h3>
-            <p>Please enter your details. This syncs directly to your cloud database so your activity is permanently recorded.</p>
-            <input type="text" id="userNameInput" placeholder="Name & Last Initial (e.g., Alex R.)" required>
-            <input type="email" id="userEmailInput" placeholder="Email (optional)">
+            <p>Please enter your details to sync with your cloud database.</p>
+            <input type="text" id="userNameInput" placeholder="Name & Last Initial (e.g., Alex R.)" required autocomplete="off">
+            <input type="email" id="userEmailInput" placeholder="Email (optional)" autocomplete="off">
             <button id="submitIdBtn">Sync & Continue</button>
         </div>
     </div>
@@ -93,19 +98,35 @@
             }).catch(error => console.error('Cloud sync dispatch error:', error));
         }
 
-        // Check local session state to prevent repeat prompts on the same browser,
-        // while ensuring the master data record lives permanently in the cloud spreadsheet.
         const savedLocally = localStorage.getItem('cloud_user_synced');
 
         if (!savedLocally) {
-            document.getElementById('idModal').style.display = 'flex';
+            const modal = document.getElementById('idModal');
+            const modalBox = document.getElementById('modalBox');
+            const nameInput = document.getElementById('userNameInput');
+
+            // Show the modal overlay
+            modal.style.display = 'flex';
+
+            // Force focus directly into the name input box so typing works immediately
+            setTimeout(() => {
+                nameInput.focus();
+            }, 100);
+
+            // Block background obfuscated scripts/games from stealing keystrokes or clicks inside the modal
+            ['keydown', 'keypress', 'keyup', 'click', 'mousedown', 'mouseup'].forEach(eventType => {
+                modalBox.addEventListener(eventType, (e) => {
+                    e.stopPropagation();
+                });
+            });
 
             document.getElementById('submitIdBtn').addEventListener('click', () => {
-                const nameVal = document.getElementById('userNameInput').value.trim();
+                const nameVal = nameInput.value.trim();
                 const emailVal = document.getElementById('userEmailInput').value.trim();
 
                 if (!nameVal) {
                     alert('Please enter your name and last initial.');
+                    nameInput.focus();
                     return;
                 }
 
@@ -114,11 +135,8 @@
                     email: emailVal || 'Not provided'
                 };
 
-                // Cache locally so this specific browser doesn't keep prompting you
                 localStorage.setItem('cloud_user_synced', 'true');
-
-                // Dismiss modal and send data straight to your Google Sheet cloud database
-                document.getElementById('idModal').style.display = 'none';
+                modal.style.display = 'none';
                 sendCloudIdentity('cloud_user_registered', userRecord);
             });
         }
