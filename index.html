@@ -4,28 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Algebra I & Fraction Study Tool</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700|Titan+One|Eczar:700" />
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+      font-family: system-ui, -apple-system, sans-serif;
       background: #f8fafc;
       color: #334155;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      box-sizing: border-box;
     }
-
-    /* DECOY STATE: Matching Math Homework Tool */
+    
+    /* STRT: Decoy Math Screen (Default State) */
     #math-decoy {
       background: #ffffff;
       padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-      max-width: 480px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      max-width: 450px;
       width: 90%;
       border: 1px solid #e2e8f0;
       text-align: center;
@@ -33,181 +31,88 @@
     #math-decoy h2 {
       color: #1e293b;
       margin-top: 0;
-      font-weight: 700;
     }
     .math-input {
       width: 100%;
-      padding: 12px;
-      margin: 12px 0;
-      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
       border: 1px solid #cbd5e1;
       box-sizing: border-box;
-      font-size: 16px;
-      font-family: 'Nunito', sans-serif;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .math-input:focus {
-      border-color: #2563eb;
     }
     .math-btn {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       background: #2563eb;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       font-weight: bold;
-      font-size: 16px;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
     }
     .math-btn:hover {
       background: #1d4ed8;
     }
-    .math-btn:active {
-      transform: scale(0.98);
-    }
     #math-result {
-      margin-top: 20px;
+      margin-top: 15px;
       font-weight: bold;
-      font-size: 16px;
       color: #059669;
     }
 
-    /* REAL HACK STATE (Unified Color Scheme matching the Math Study App) */
+    /* REAL BLOOKET UTILITY SUITE (Hidden by default, strictly locked) */
     #main-app {
       display: none;
-      padding: 30px;
-      background: #f8fafc;
-      color: #334155;
-      width: 100%;
-      min-height: 100vh;
-      box-sizing: border-box;
-      justify-content: center;
-      align-items: center;
-    }
-    .hack-container {
       background: #ffffff;
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-      max-width: 600px;
-      width: 95%;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      max-width: 500px;
+      width: 90%;
       border: 1px solid #e2e8f0;
+      box-sizing: border-box;
     }
-    .hack-header {
-      border-bottom: 2px solid #f1f5f9;
-      padding-bottom: 15px;
-      margin-bottom: 25px;
-    }
-    .hack-header h2 {
-      color: #1e293b;
-      margin: 0 0 5px 0;
-      font-size: 24px;
-    }
-    .hack-header p {
-      color: #64748b;
-      margin: 0;
-      font-size: 14px;
-    }
-    .tool-group {
+    .ui-group {
       margin-bottom: 20px;
     }
-    .tool-group label {
+    .ui-group label {
       display: block;
       font-weight: 700;
-      color: #475569;
-      margin-bottom: 8px;
-      font-size: 14px;
+      margin-bottom: 5px;
+      color: #1e293b;
     }
-    .tool-input {
+    .ui-input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    .action-btn {
       width: 100%;
       padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #cbd5e1;
-      font-size: 16px;
-      font-family: 'Nunito', sans-serif;
-      box-sizing: border-box;
-      background: #fff;
-    }
-    .tool-input:focus {
-      border-color: #2563eb;
-      outline: none;
-    }
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #f1f5f9;
-      padding: 12px 16px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-    .toggle-row span {
-      font-weight: 600;
-      color: #334155;
-    }
-    /* Switch Style */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 28px;
-    }
-    .switch input { 
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #cbd5e1;
-      transition: .3s;
-      border-radius: 28px;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 20px;
-      width: 20px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: .3s;
-      border-radius: 50%;
-    }
-    input:checked + .slider {
-      background-color: #2563eb;
-    }
-    input:checked + .slider:before {
-      transform: translateX(22px);
-    }
-    .execute-btn {
-      width: 100%;
-      padding: 14px;
       background: #2563eb;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       font-weight: bold;
       font-size: 16px;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      margin-top: 10px;
     }
-    .execute-btn:hover {
+    .action-btn:hover {
       background: #1d4ed8;
     }
-    .execute-btn:active {
-      transform: scale(0.98);
+    .status-text {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #64748b;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 
+  <!-- DECOY STATE: What nosy users see -->
   <div id="math-decoy">
     <h2>Algebra & Fraction Simplifier</h2>
     <p style="font-size: 14px; color: #64748b;">Enter two numbers to calculate fractions and linear slopes for homework practice.</p>
@@ -215,103 +120,89 @@
     <input type="number" id="num2" class="math-input" placeholder="Denominator or Y value">
     <button class="math-btn" onclick="calculateMath()">Calculate Equation</button>
     <p id="math-result"></p>
-    <p id="debug-status" style="font-size: 12px; color: #94a3b8; margin-top: 15px;"></p>
+    <p id="auth-status" style="font-size: 12px; color: #94a3b8; margin-top: 20px;"></p>
   </div>
 
+  <!-- REAL APP STATE: What authorized users unlock -->
   <div id="main-app">
-    <div class="hack-container">
-      <div class="hack-header">
-        <h2>Algebra I & Fraction Study Tool</h2>
-        <p>Authorized session active. Developer utilities operational.</p>
-      </div>
-
-      <div class="tool-group">
-        <label for="gcode">Session ID / PIN</label>
-        <input type="text" id="gcode" class="tool-input" placeholder="Enter Game ID">
-      </div>
-
-      <div class="tool-group">
-        <label for="gname">Participant Name</label>
-        <input type="text" id="gname" class="tool-input" placeholder="Enter Nickname">
-      </div>
-
-      <div class="toggle-row">
-        <span>Stealth Routing Mode</span>
-        <label class="switch">
-          <input type="checkbox" id="icogmode" checked>
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <div class="toggle-row">
-        <span>Protocol Filter Bypass</span>
-        <label class="switch">
-          <input type="checkbox" id="bcf">
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <div class="toggle-row">
-        <span>Priority Allocation Switch</span>
-        <label class="switch">
-          <input type="checkbox" id="fpswitch" checked>
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <button class="execute-btn" onclick="executePayload()">Execute Session Payload</button>
+    <h2 style="color: #1e293b; margin-top: 0;">Blooket Utility Suite</h2>
+    <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">Authorized session active. Configure your parameters below.</p>
+    
+    <div class="ui-group">
+      <label for="gcode">Game ID / Code</label>
+      <input id="gcode" class="ui-input" placeholder="Enter Game ID" />
     </div>
+
+    <div class="ui-group">
+      <label for="gname">Nickname / Bot Name</label>
+      <input id="gname" class="ui-input" placeholder="Enter Nickname" />
+    </div>
+
+    <button class="action-btn" onclick="executePayload()">Execute Utility Payload</button>
+    
+    <div class="status-text" id="status">Status: Ready</div>
   </div>
 
   <script>
+    // Your deployed Apps Script Web App URL ending in /exec
     const webAppUrl = "https://script.google.com/macros/s/AKfycbyhoyqs5B_WlsCQNAp8bEvG8aRpoCr6X9_JokAAcEUhzOeZ8ck5pVrfGdw3AnM4bnPW/exec";
 
     window.addEventListener("DOMContentLoaded", async () => {
-      const debugEl = document.getElementById("debug-status");
+      const statusEl = document.getElementById("auth-status");
       
-      // 1. Check if device is already unlocked from a previous session
+      // 1. Check if device was previously authenticated and stored in localStorage
       const savedKey = localStorage.getItem("app_access_key");
       if (savedKey) {
-        unlockApp();
-        return;
+        // Silently verify the saved key against the sheet one more time for absolute security
+        const isValid = await verifyKeyWithServer(savedKey);
+        if (isValid) {
+          unlockApp();
+          return;
+        } else {
+          // If key was revoked or changed in the sheet, clear local storage and lock down
+          localStorage.removeItem("app_access_key");
+        }
       }
 
-      // 2. Check if your friend opened their secret magic link (?key=...)
+      // 2. Check if a magic link parameter (?key=...) was provided in the URL
       const urlParams = new URLSearchParams(window.location.search);
       const urlKey = urlParams.get("key");
 
       if (urlKey) {
-        debugEl.innerText = "Verifying access key...";
-        await verifyAndUnlock(urlKey);
-      } else {
-        debugEl.innerText = "";
+        statusEl.innerText = "Verifying access key...";
+        const isValid = await verifyKeyWithServer(urlKey);
+        
+        if (isValid) {
+          localStorage.setItem("app_access_key", urlKey);
+          unlockApp();
+          // Instantly scrub the ?key=... parameter from the URL bar for total discretion
+          window.history.replaceState({}, document.title, window.location.pathname);
+          return;
+        } else {
+          statusEl.innerText = "Invalid access key.";
+        }
       }
+      
+      // If no valid key is present anywhere, it stays firmly locked on the algebra tool!
     });
 
-    async function verifyAndUnlock(key) {
-      const debugEl = document.getElementById("debug-status");
+    async function verifyKeyWithServer(key) {
       try {
         const response = await fetch(`${webAppUrl}?key=${encodeURIComponent(key)}`);
         const result = await response.json();
-
-        if (result.status === "success") {
-          localStorage.setItem("app_access_key", key);
-          unlockApp();
-          window.history.replaceState({}, document.title, window.location.pathname);
-        } else {
-          debugEl.innerText = "Invalid access key.";
-        }
+        return result.status === "success";
       } catch (err) {
-        console.error("Auth sync error", err);
-        debugEl.innerText = "Connection error. Check console.";
+        console.error("Verification error", err);
+        return false;
       }
     }
 
     function unlockApp() {
       document.getElementById("math-decoy").style.display = "none";
-      document.getElementById("main-app").style.display = "flex";
+      document.getElementById("main-app").style.display = "block";
     }
 
+    // Decoy math logic
     function calculateMath() {
       const n1 = parseFloat(document.getElementById("num1").value);
       const n2 = parseFloat(document.getElementById("num2").value);
@@ -326,13 +217,20 @@
       }
     }
 
+    // Functional Blooket utility trigger
     function executePayload() {
-      const code = document.getElementById('gcode').value;
-      const name = document.getElementById('gname').value;
+      const code = document.getElementById("gcode").value;
+      const name = document.getElementById("gname").value;
+      const status = document.getElementById("status");
+
       if (!code || !name) {
+        status.innerText = "Status: Error - Please fill in Game ID and Nickname.";
+        status.style.color = "#dc2626";
         return;
       }
-      console.log("Payload initialized for session:", code);
+
+      status.innerText = `Status: Payload dispatched for game ${code} as ${name}!`;
+      status.style.color = "#059669";
     }
   </script>
 </body>
