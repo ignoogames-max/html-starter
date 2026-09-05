@@ -1,38 +1,31 @@
 <!DOCTYPE html>
-<html prefix="og: https://ogp.me/ns#">
+<html lang="en">
 <head>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700|Titan+One|Creepster|Satisfy|Eczar:700" />
-  <link rel="icon" href="https://placehold.co/32x32/2563eb/ffffff?text=A" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Algebra I & Fraction Study Tool" />
-  <meta property="og:title" content="Algebra I & Fraction Study Tool" />
-  <meta property="og:description" content="Algebra I & Fraction Study Tool for homework practice." />
-  <meta property="og:type" content="website" />
   <title>Algebra I & Fraction Study Tool</title>
-
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700|Titan+One|Satisfy|Eczar:700" />
   <style>
-    #math-decoy-container {
+    body {
       margin: 0;
       padding: 0;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
+      font-family: 'Nunito', system-ui, -apple-system, sans-serif;
       background: #f8fafc;
       color: #334155;
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 999999999;
-      font-family: system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      box-sizing: border-box;
     }
+
+    /* DECOY STATE: Matching Math Homework Tool */
     #math-decoy {
       background: #ffffff;
       padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      max-width: 450px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      max-width: 480px;
       width: 90%;
       border: 1px solid #e2e8f0;
       text-align: center;
@@ -40,396 +33,282 @@
     #math-decoy h2 {
       color: #1e293b;
       margin-top: 0;
+      font-weight: 700;
     }
     .math-input {
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 6px;
+      padding: 12px;
+      margin: 12px 0;
+      border-radius: 8px;
       border: 1px solid #cbd5e1;
       box-sizing: border-box;
+      font-size: 16px;
+      font-family: 'Nunito', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .math-input:focus {
+      border-color: #2563eb;
     }
     .math-btn {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       background: #2563eb;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       font-weight: bold;
+      font-size: 16px;
       cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
     }
     .math-btn:hover {
       background: #1d4ed8;
     }
+    .math-btn:active {
+      transform: scale(0.98);
+    }
     #math-result {
-      margin-top: 15px;
+      margin-top: 20px;
       font-weight: bold;
+      font-size: 16px;
       color: #059669;
     }
 
-    .mainBody {
-      margin: 0;
-      padding: 0;
-      position: absolute;
-      top: 0;
-      left: 0;
-      font-family: Nunito, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      color: #3a3a3a;
+    /* REAL HACK STATE (Unified Color Scheme matching the Math Study App) */
+    #main-app {
+      display: none;
+      padding: 30px;
+      background: #f8fafc;
+      color: #334155;
       width: 100%;
       min-height: 100vh;
-    }
-    ._checkers_l90pt_12 {
-      z-index: -9999;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(15deg);
-      opacity: 0.08;
-      background-size: 550px;
-      width: 200%;
-      height: 200%;
-    }
-    .errorBar {
-      position: absolute;
-      top: 100%;
-      color: #fff;
-      background-color: #e84135;
-      min-height: 55px;
-      width: 100%;
-      left: 0;
-      padding: 11px 5px 5px;
       box-sizing: border-box;
-      box-shadow: inset 0 6px #0003;
-      overflow: hidden;
-      z-index: 999999999999999;
-      display: flex;
+      display: none; /* controlled dynamically */
       justify-content: center;
       align-items: center;
-      font-size: 20px;
-      transition: 0.1s;
     }
-    .joinButton {
-      height: 60px;
-      width: 60px;
-      cursor: pointer;
-      overflow: hidden;
-      outline: none;
-      background-color: #fff;
-      padding-bottom: 6px;
-      box-shadow: inset 0 -6px #0003, 0 0 4px #00000026;
-      border-radius: 5px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: 0.2s;
+    .hack-container {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      max-width: 600px;
+      width: 95%;
+      border: 1px solid #e2e8f0;
     }
-    .discordButton {
-      height: 40px;
-      width: 130px;
-      cursor: pointer;
-      overflow: hidden;
-      outline: none;
-      background-color: #fff;
-      box-shadow: inset 0 -6px #0003, 0 0 4px #00000026;
-      border-radius: 5px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: 0.2s;
-      font-size: 20px;
-      float: left;
-      margin-top: 3px;
+    .hack-header {
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 15px;
+      margin-bottom: 25px;
     }
-    .joinButton:hover, .discordButton:hover {
-      transform: scale(0.9);
+    .hack-header h2 {
+      color: #1e293b;
+      margin: 0 0 5px 0;
+      font-size: 24px;
     }
-    .nameInput {
-      width: 100%;
-      height: 100%;
-      background-color: transparent;
-      border: none;
-      padding: 5px;
-      box-sizing: border-box;
-      font-size: 35px;
+    .hack-header p {
+      color: #64748b;
+      margin: 0;
+      font-size: 14px;
+    }
+    .tool-group {
+      margin-bottom: 20px;
+    }
+    .tool-group label {
+      display: block;
       font-weight: 700;
-      text-align: center;
-      outline: none;
-      font-family: Nunito, sans-serif;
-      color: #5f5f5f;
+      color: #475569;
+      margin-bottom: 8px;
+      font-size: 14px;
     }
-    .idInputContainer {
-      width: 200px;
-      height: 60px;
-      padding-bottom: 6px;
-      box-shadow: inset 0 -6px #0003, 0 0 4px #00000026;
-      background-color: #fff;
-      border-radius: 6px;
-    }
-    .nameInputContainer {
-      width: 348px;
-      height: 60px;
-      padding-bottom: 6px;
-      box-shadow: inset 0 -6px #0003, 0 0 4px #00000026;
-      background-color: #fff;
-      border-radius: 6px;
-    }
-    .idInput {
+    .tool-input {
       width: 100%;
-      height: 100%;
-      background-color: transparent;
-      border: none;
-      padding: 5px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 16px;
+      font-family: 'Nunito', sans-serif;
       box-sizing: border-box;
-      font-size: 35px;
-      font-weight: 700;
-      text-align: center;
-      font-family: Nunito, sans-serif;
+      background: #fff;
+    }
+    .tool-input:focus {
+      border-color: #2563eb;
       outline: none;
-      color: #5f5f5f;
     }
-    .inputcontainer:hover {
-      box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f1f5f9;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 15px;
     }
-    * {
-      touch-action: manipulation;
+    .toggle-row span {
+      font-weight: 600;
+      color: #334155;
     }
-    .normtext {
-      z-index: 1 !important;
-      font-size: 40px;
-      color: #fff;
-      text-align: left;
-      margin-left: 1px;
-      font-family: Titan One, sans-serif;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-      text-decoration: none;
-    }
-    .codecontainer {
-      margin: 5px;
-    }
-    .btext {
-      font-size: 140%;
-      color: #5f5f5f;
-      -webkit-user-select: none;
-    }
-    #ctrlpanel {
-      margin-left: 170px;
-      margin-right: 170px;
-    }
-    .inputcontainer {
-      background-color: #df9000;
-      display: inline-block;
-      border-radius: 4px;
-      user-select: none;
-      cursor: pointer;
-      justify-items: center;
-    }
-    .inputcontainer>div {
-      font-size: 23px;
-      text-align: center;
-      font-family: Source Code Pro, monospace;
-      color: black;
-      display: grid;
-      padding-inline: 5px;
-    }
-    .inputcontainer>input, .inputcontainer>select {
-      margin: 4px;
-      text-align: center;
-      font-size: 18px;
-      background-color: white;
-    }
-    button {
-      font-size: 23px;
-    }
-    .cheatcontainer>* {
-      margin: 15px;
-    }
-    checkbox {
-      display: inline-block;
-      width: 60px;
-      height: 34px;
-      background-color: grey;
-      border-radius: 34px;
+    /* Switch Style */
+    .switch {
       position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 28px;
+    }
+    .switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
       cursor: pointer;
-      transition: background-color 0.3s;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1;
+      transition: .3s;
+      border-radius: 28px;
     }
-    checkbox::before {
-      content: '';
+    .slider:before {
       position: absolute;
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background-color: white;
-      top: 4px;
+      content: "";
+      height: 20px;
+      width: 20px;
       left: 4px;
-      transition: transform 0.3s;
-    }
-    checkbox[checked] {
-      background-color: #df9000;
-    }
-    checkbox[checked]::before {
-      transform: translateX(26px);
+      bottom: 4px;
       background-color: white;
+      transition: .3s;
+      border-radius: 50%;
     }
-    ::selection {
-      background-color: #0ab6c250;
+    input:checked + .slider {
+      background-color: #2563eb;
     }
-    .chat {
-      position: fixed;
-      margin: 10px;
-      background-color: #091794;
-      border-radius: 10px;
+    input:checked + .slider:before {
+      transform: translateX(22px);
     }
-    .chatcontainer {
-      width: 750px;
-      height: 250px;
-      background-color: #202020a0;
-      margin: 10px;
-      flex-direction: column-reverse;
-      display: flex;
-      overflow-y: auto;
-    }
-    .chatmsg {
-      color: white;
-      font-size: 22px;
-      margin-left: 1px;
-    }
-    .chatinpcontainer {
-      margin: 10px;
-    }
-    #chat {
-      width: -webkit-fill-available;
-      font-size: 22px;
-    }
-    .dragcontainer {
-      background-color: #091794;
-      font-size: 20px;
-      position: absolute;
-      border-radius: 10px;
-      font-weight: bold;
-    }
-    #drag {
-      margin: 5px;
-      user-select: none;
-      cursor: move;
-    }
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-    .mainBody {
-      position: relative !important;
-      top: 0 !important;
-      left: 0 !important;
+    .execute-btn {
       width: 100%;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding: 14px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 10px;
     }
-    .centerStage {
-      width: fit-content;
-      max-width: 100%;
-      margin-left: 0px;
+    .execute-btn:hover {
+      background: #1d4ed8;
+    }
+    .execute-btn:active {
+      transform: scale(0.98);
     }
   </style>
 </head>
-<body style="background-color: rgb(9, 148, 65)">
+<body>
 
-  <div id="math-decoy-container">
-    <div id="math-decoy">
-      <h2>Algebra & Fraction Study Tool</h2>
-      <p style="font-size: 14px; color: #64748b;">Enter two values to calculate fractions and linear slopes for homework practice.</p>
-      <input type="number" id="num1" class="math-input" placeholder="Numerator or X value">
-      <input type="number" id="num2" class="math-input" placeholder="Denominator or Y value">
-      <button class="math-btn" onclick="calculateMath()">Calculate Equation</button>
-      <p id="math-result"></p>
-    </div>
+  <!-- DECOY: What nosy classmates see when they visit the raw URL -->
+  <div id="math-decoy">
+    <h2>Algebra & Fraction Simplifier</h2>
+    <p style="font-size: 14px; color: #64748b;">Enter two numbers to calculate fractions and linear slopes for homework practice.</p>
+    <input type="number" id="num1" class="math-input" placeholder="Numerator or X value">
+    <input type="number" id="num2" class="math-input" placeholder="Denominator or Y value">
+    <button class="math-btn" onclick="calculateMath()">Calculate Equation</button>
+    <p id="math-result"></p>
   </div>
 
-  <div class="mainBody" style="z-index: 0; background-color: rgb(9, 148, 65); overflow: hidden; min-height: -webkit-fill-available !important">
-    <div class="_checkers_l90pt_12"></div>
-    <div class="centerStage">
-      <div class="codecontainer" id="cc">
-        <div class="normtext">Enter code:</div>
-        <div class="idInputContainer">
-          <input id="gcode" class="idInput" placeholder="ID" />
-        </div>
-        <div class="nameInputContainer">
-          <input id="gname" class="nameInput" placeholder="Name" />
-        </div>
-        <div class="joinButton" onclick="join()" role="button">
-          <div class="btext">Join</div>
-        </div>
-        <input type="hidden" name="IL_IN_TAG" value="2" />
-        <text class="normtext" style="display: none" id="ostatus"></text>
-        <text class="normtext">Secure Mode:</text>
-        <checkbox id="icogmode" checked="true"></checkbox><br />
-        <text class="normtext">Bypass Filter:</text>
-        <checkbox id="bcf"></checkbox><br />
-        <text class="normtext">First Place Switch:</text>
-        <checkbox id="fpswitch" checked="true"></checkbox><br />
-        <text>*for optimal display your amount must not be a number!</text>
+  <!-- REAL APP: What your friends unlock using their secret magic link -->
+  <div id="main-app">
+    <div class="hack-container">
+      <div class="hack-header">
+        <h2>Algebra I & Fraction Study Tool</h2>
+        <p>Authorized session active. Developer utilities operational.</p>
       </div>
-      <div id="ctrlpanel"></div>
-      <div style="margin-left: 5px">
-        <div class="normtext" id="status">Status: Ready</div>
+
+      <div class="tool-group">
+        <label for="gcode">Session ID / PIN</label>
+        <input type="text" id="gcode" class="tool-input" placeholder="Enter Game ID">
       </div>
-      <div class="errorBar" id="error" style="transform: translateY(0%)"></div>
+
+      <div class="tool-group">
+        <label for="gname">Participant Name</label>
+        <input type="text" id="gname" class="tool-input" placeholder="Enter Nickname">
+      </div>
+
+      <div class="toggle-row">
+        <span>Stealth Routing Mode</span>
+        <label class="switch">
+          <input type="checkbox" id="icogmode" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <span>Protocol Filter Bypass</span>
+        <label class="switch">
+          <input type="checkbox" id="bcf">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <span>Priority Allocation Switch</span>
+        <label class="switch">
+          <input type="checkbox" id="fpswitch" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <button class="execute-btn" onclick="executePayload()">Execute Session Payload</button>
     </div>
   </div>
 
   <script>
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbw8B3cPM6TRvGZe7Hgc-MTDWBsLiFUnx79IeymJR1UEVmlSNeKuFcRjRDW8k5CrcrMV/exec";
+    // Updated Apps Script Web App URL
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbyhoyqs5B_WlsCQNAp8bEvG8aRpoCr6X9_JokAAcEUhzOeZ8ck5pVrfGdw3AnM4bnPW/exec";
 
     window.addEventListener("DOMContentLoaded", async () => {
+      // 1. Check if device is already unlocked from a previous session
       const savedKey = localStorage.getItem("app_access_key");
       if (savedKey) {
-        unlockAppInterface();
+        unlockApp();
         return;
       }
 
+      // 2. Check if your friend opened their secret magic link (?key=...)
       const urlParams = new URLSearchParams(window.location.search);
       const urlKey = urlParams.get("key");
 
       if (urlKey) {
         await verifyAndUnlock(urlKey);
       }
+      // If no key is found, it sits proudly on the clean algebra math screen!
     });
 
     async function verifyAndUnlock(key) {
       try {
-        const response = await fetch(webAppUrl, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ key: key }),
-        });
-
+        const response = await fetch(`${webAppUrl}?key=${encodeURIComponent(key)}`);
         const result = await response.json();
 
         if (result.status === "success") {
           localStorage.setItem("app_access_key", key);
-          unlockAppInterface();
+          unlockApp();
+          // Wipe the key from the URL bar instantly so nobody can look over and steal it
           window.history.replaceState({}, document.title, window.location.pathname);
         }
       } catch (err) {
-        // Silenced error output for privacy
+        console.error("Auth sync error");
       }
     }
 
-    function unlockAppInterface() {
-      const decoy = document.getElementById("math-decoy-container");
-      if (decoy) {
-        decoy.style.display = "none";
-      }
+    function unlockApp() {
+      document.getElementById("math-decoy").style.display = "none";
+      document.getElementById("main-app").style.display = "flex";
     }
 
+    // Dummy math function for the decoy screen
     function calculateMath() {
       const n1 = parseFloat(document.getElementById("num1").value);
       const n2 = parseFloat(document.getElementById("num2").value);
@@ -444,20 +323,15 @@
       }
     }
 
-    function join() {
-      var cin = document.getElementById('gcode');
-      var name = document.getElementById('gname');
-      var icog = document.getElementById('icogmode').getAttribute('checked') ? true : false;
-      // Portal routing logic initialized
-    }
-
-    function errorBar(error) {
-      var e = document.getElementById('error');
-      e.innerText = error;
-      e.style.transform = 'translateY(-100%)';
-      setTimeout(function () {
-        e.style.transform = 'translateY(0%)';
-      }, 4000);
+    function executePayload() {
+      const code = document.getElementById('gcode').value;
+      const name = document.getElementById('gname').value;
+      if (!code || !name) {
+        alert("Please fill in both fields.");
+        return;
+      }
+      // Session execution hook
+      console.log("Payload initialized for session:", code);
     }
   </script>
 </body>
