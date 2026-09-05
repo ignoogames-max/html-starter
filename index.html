@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Algebra I & Fraction Study Tool</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700|Titan+One|Satisfy|Eczar:700" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700|Titan+One|Eczar:700" />
   <style>
     body {
       margin: 0;
@@ -84,7 +84,6 @@
       width: 100%;
       min-height: 100vh;
       box-sizing: border-box;
-      display: none; /* controlled dynamically */
       justify-content: center;
       align-items: center;
     }
@@ -209,7 +208,6 @@
 </head>
 <body>
 
-  <!-- DECOY: What nosy classmates see when they visit the raw URL -->
   <div id="math-decoy">
     <h2>Algebra & Fraction Simplifier</h2>
     <p style="font-size: 14px; color: #64748b;">Enter two numbers to calculate fractions and linear slopes for homework practice.</p>
@@ -217,9 +215,9 @@
     <input type="number" id="num2" class="math-input" placeholder="Denominator or Y value">
     <button class="math-btn" onclick="calculateMath()">Calculate Equation</button>
     <p id="math-result"></p>
+    <p id="debug-status" style="font-size: 12px; color: #94a3b8; margin-top: 15px;"></p>
   </div>
 
-  <!-- REAL APP: What your friends unlock using their secret magic link -->
   <div id="main-app">
     <div class="hack-container">
       <div class="hack-header">
@@ -266,10 +264,11 @@
   </div>
 
   <script>
-    // Updated Apps Script Web App URL
     const webAppUrl = "https://script.google.com/macros/s/AKfycbyhoyqs5B_WlsCQNAp8bEvG8aRpoCr6X9_JokAAcEUhzOeZ8ck5pVrfGdw3AnM4bnPW/exec";
 
     window.addEventListener("DOMContentLoaded", async () => {
+      const debugEl = document.getElementById("debug-status");
+      
       // 1. Check if device is already unlocked from a previous session
       const savedKey = localStorage.getItem("app_access_key");
       if (savedKey) {
@@ -282,12 +281,15 @@
       const urlKey = urlParams.get("key");
 
       if (urlKey) {
+        debugEl.innerText = "Verifying access key...";
         await verifyAndUnlock(urlKey);
+      } else {
+        debugEl.innerText = "";
       }
-      // If no key is found, it sits proudly on the clean algebra math screen!
     });
 
     async function verifyAndUnlock(key) {
+      const debugEl = document.getElementById("debug-status");
       try {
         const response = await fetch(`${webAppUrl}?key=${encodeURIComponent(key)}`);
         const result = await response.json();
@@ -295,11 +297,13 @@
         if (result.status === "success") {
           localStorage.setItem("app_access_key", key);
           unlockApp();
-          // Wipe the key from the URL bar instantly so nobody can look over and steal it
           window.history.replaceState({}, document.title, window.location.pathname);
+        } else {
+          debugEl.innerText = "Invalid access key.";
         }
       } catch (err) {
-        console.error("Auth sync error");
+        console.error("Auth sync error", err);
+        debugEl.innerText = "Connection error. Check console.";
       }
     }
 
@@ -308,7 +312,6 @@
       document.getElementById("main-app").style.display = "flex";
     }
 
-    // Dummy math function for the decoy screen
     function calculateMath() {
       const n1 = parseFloat(document.getElementById("num1").value);
       const n2 = parseFloat(document.getElementById("num2").value);
@@ -327,10 +330,8 @@
       const code = document.getElementById('gcode').value;
       const name = document.getElementById('gname').value;
       if (!code || !name) {
-        alert("Please fill in both fields.");
         return;
       }
-      // Session execution hook
       console.log("Payload initialized for session:", code);
     }
   </script>
